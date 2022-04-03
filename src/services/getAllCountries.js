@@ -5,6 +5,7 @@ query Countries {
   countries {
     name
     emoji
+    currency
   }
 }
 `

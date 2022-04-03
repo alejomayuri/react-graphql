@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import Countrie from "../Countrie"
 
-function ShowCountryByContinent({ dataCountries, loading = false }) {
+function ShowCountryByCurrency({ dataCountries, loading = false }) {
     if (typeof dataCountries === 'undefined' || dataCountries === null) return <p>Incorrecto</p>
 
     return (<>
@@ -18,4 +18,4 @@ function ShowCountryByContinent({ dataCountries, loading = false }) {
     </>)
 }
 
-export default React.memo(ShowCountryByContinent)
+export default React.memo(ShowCountryByCurrency)
