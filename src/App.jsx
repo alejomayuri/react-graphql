@@ -1,4 +1,3 @@
-
 import './App.css'
 import { useState, useCallback, useEffect } from 'react'
 import { gql, useLazyQuery } from '@apollo/client'
@@ -8,6 +7,7 @@ import ShowCountryByContinent from './components/ShowCountryByContinent'
 import ShowCountryByCurrency from './components/ShowCountryByCurrency'
 import getAllCountries from './services/getAllCountries'
 import getAllContinents from './services/getAllContinents'
+import { useLocation } from "wouter"
 
 const FIND_COUNTRIES_BY_FILTER = gql`
 query findCountriesByContinent($filter: CountryFilterInput) {
@@ -21,6 +21,17 @@ query findCountriesByContinent($filter: CountryFilterInput) {
 `
 
 function App() {
+
+  //navigate
+  const [path, pushLocation] = useLocation()
+  const handleNavigate = (keyword) => {
+
+    pushLocation(`/country/${keyword}`)
+  }
+
+  //Conditional render state for home page
+  const [typeSearchCountry, setTypeSearchCountry] = useState(null)
+
   //Continents
   const { dataContinentFull, loading, error } = getAllContinents()
 
@@ -39,23 +50,20 @@ function App() {
   const [countriesByCurrency, setCountriesByCurrency] = useState([])
   const [currencyCarga, setCurrencyCarga] = useState(true)
 
-  //Conditional render state for home page
-  const [typeSearchCountry, setTypeSearchCountry] = useState(null)
-
   useEffect(() => {
     let arrCurrency = []
     if (data) arrCurrency = data['countries'].map(country => country.currency)
-    
+
     function filterArray(arr) {
       const found = {}
-      const out = arr.filter(function(element) {
-        return found.hasOwnProperty(element)? false : (found[element]=true);
+      const out = arr.filter(function (element) {
+        return found.hasOwnProperty(element) ? false : (found[element] = true);
       })
       return out;
     }
     const newCurrencies = filterArray(arrCurrency)
     setCurrencies(newCurrencies)
-  },[data])
+  }, [data])
 
   //findByContinent code
   const [getCountries, resultCountries] = useLazyQuery(FIND_COUNTRIES_BY_FILTER)
@@ -71,13 +79,14 @@ function App() {
         }
       }
     })
-    .then(res => {
-      setCountriesByContinent(res.data.countries)
-      setTypeSearchCountry('continent')
-      setContinetCarga(resultCountries.loading)
-    })
+      .then(res => {
+        setCountriesByContinent(res.data.countries)
+        setTypeSearchCountry('continent')
+        setContinetCarga(resultCountries.loading)
+      })
   }
 
+  //findByCurrency code
   const showCountriesByCurrency = (e) => {
     setCurrencyCarga(true)
     getCountries({
@@ -89,18 +98,21 @@ function App() {
         }
       }
     })
-    .then(res => {
-      setCountriesByCurrency(res.data.countries)
-      setTypeSearchCountry('currency')
-      setCurrencyCarga(resultCountries.loading)
-    })
+      .then(res => {
+        setCountriesByCurrency(res.data.countries)
+        setTypeSearchCountry('currency')
+        setCurrencyCarga(resultCountries.loading)
+      })
   }
 
   //searchCountry code
-  const handleSubmit = useCallback (name => {
-    const nameCountryMin = name.toLowerCase()
-    const nameCountry = nameCountryMin[0].toUpperCase() + nameCountryMin.slice(1)
-    
+  const handleSubmit = useCallback(name => {
+    const nameCountryMin = name.toLowerCase().split(' ')
+    for (let i = 0; i < nameCountryMin.length; i++) {
+      if (nameCountryMin[i] === 'of' || nameCountryMin[i] === 'the' || nameCountryMin[i] === 'and') continue
+        nameCountryMin[i] = nameCountryMin[i][0].toUpperCase() + nameCountryMin[i].slice(1)
+    }
+    let nameCountry= nameCountryMin.join(' ')
     setCountry(data['countries'].find(country => country.name === nameCountry))
     setTypeSearchCountry('single')
   }, [data])
@@ -110,29 +122,29 @@ function App() {
     if (typeSearchCountry === 'single') {
       return <ShowSingleCountry dataCountry={country} />
     } else if (typeSearchCountry === 'continent') {
-      return <ShowCountryByContinent dataCountries={countriesByContinent} loading={continetCarga} />
-    }else if (typeSearchCountry === 'currency') {
+      return <ShowCountryByContinent dataCountries={countriesByContinent} loading={continetCarga} navigate={handleNavigate} />
+    } else if (typeSearchCountry === 'currency') {
       return <ShowCountryByCurrency dataCountries={countriesByCurrency} loading={currencyCarga} />
     }
     return null
   }
 
   // if (error) return <span style='color: red'>{error}</span>
-  
+
   return (
     <div className="App">
       <header className="App-header">
         <SearchForm onSubmit={handleSubmit} />
         <select onChange={showCountriesByContinent}>
           {
-            dataContinentFull['continents']?.map(continent => 
+            dataContinentFull['continents']?.map(continent =>
               <option key={continent.code} value={continent.code}>{continent.name}</option>
             )
           }
         </select>
         <select onChange={showCountriesByCurrency}>
           {
-            currencies.map(currencies => 
+            currencies.map(currencies =>
               <option key={currencies} value={currencies}>{currencies}</option>
             )
           }
