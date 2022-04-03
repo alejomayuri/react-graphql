@@ -1,13 +1,12 @@
-export default function ShowSingleCountry({ dataCountry }) {
+import Country from "../Countrie"
+
+export default function ShowSingleCountry({ dataCountry, navigate }) {
 
     if (typeof dataCountry === 'undefined' || dataCountry === null) return <p>Incorrecto</p>
 
   
         return (
-            <div>
-                <p>{dataCountry.name}</p>
-                <p>{dataCountry.emoji}</p>
-            </div>
+            <Country country={dataCountry} navigate={navigate} />
         )
 
 

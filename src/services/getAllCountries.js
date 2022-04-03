@@ -3,9 +3,17 @@ import { gql, useQuery } from "@apollo/client";
 const ALL_COUNTRIES = gql`
 query Countries {
   countries {
+    code
     name
     emoji
     currency
+    continent {
+      name
+    }
+    languages {
+      name
+    }
+    capital
   }
 }
 `

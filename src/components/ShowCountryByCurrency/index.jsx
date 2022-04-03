@@ -7,13 +7,9 @@ function ShowCountryByCurrency({ dataCountries, loading = false }) {
     return (<>
         {
             loading ? <p>Cargando...</p> :
-            dataCountries.map(country => (
-                <Countrie key={country.code} country={country} />
-                // <div key={country.code}>
-                //     <p>{country.name}</p>
-                //     <p>{country.emoji}</p>
-                // </div>
-            ))
+                dataCountries.map(country => (
+                    <Countrie key={country.code} country={country} />
+                ))
         }
     </>)
 }
