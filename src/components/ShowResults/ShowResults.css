@@ -1,0 +1,15 @@
+.showCountriesContainer {
+    padding-top: 210px;
+}
+
+.showCountriesContainer h2 {
+    position: fixed;
+    background: gold;
+    width: 100%;
+    margin: 0;
+    top: 307px;
+}
+
+.showCountriesContainer .countresSelectedContainer {
+    margin-top: 150px;
+}

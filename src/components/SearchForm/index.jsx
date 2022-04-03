@@ -1,14 +1,14 @@
+import './SearchForm.css'
 import React, { useState } from "react"
 
 function SearchForm({ onSubmit }) {
     const [keyword, setKeyword] = useState('')
     const [disabled, setDisabled] = useState(true)
-   
 
     const handleSubmit = evt => {
         evt.preventDefault()
-        // navegar a otra ruta
         onSubmit(keyword)
+        setKeyword('')
     }
 
     const handleChange = evt => {
@@ -17,9 +17,9 @@ function SearchForm({ onSubmit }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <button disabled={disabled}>Buscar</button>
-            <input placeholder="Search a gif here..." onChange={handleChange} type='text' value={keyword} />
+        <form id='formul' onSubmit={handleSubmit} className='searchForm'>
+            {/* <button disabled={disabled}>Buscar</button> */}
+            <input placeholder="Search a country here..." onChange={handleChange} type='text' value={keyword} />
         </form>
     )
 

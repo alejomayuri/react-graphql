@@ -1,4 +1,5 @@
-import Country from "../Countrie"
+import './ShowSingleCountry.css'
+import Country from "../Country"
 
 export default function ShowSingleCountry({ dataCountry, navigate }) {
 
@@ -6,7 +7,9 @@ export default function ShowSingleCountry({ dataCountry, navigate }) {
 
   
         return (
-            <Country country={dataCountry} navigate={navigate} />
+            <div className="singleCountryContainer">
+                <Country country={dataCountry} navigate={navigate} />
+            </div>
         )
 
 

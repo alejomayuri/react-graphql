@@ -1,3 +1,5 @@
+import'./Country.css'
+
 export default function Country({country, navigate}) {
 
     const handleNavigateOnCountry = evt => {
@@ -7,7 +9,7 @@ export default function Country({country, navigate}) {
     }
     return (
 
-        <div onClick={handleNavigateOnCountry}>
+        <div className="country" onClick={handleNavigateOnCountry}>
             <p>{country.name}</p>
             <p>{country.emoji}</p>
         </div>
